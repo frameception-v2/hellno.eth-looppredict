@@ -1,3 +1,3 @@
-export const PROJECT_ID = 'farcaster-frames-template';
-export const PROJECT_TITLE = "Farcaster Frames Template";
-export const PROJECT_DESCRIPTION = "A Farcaster Frames v2 Template by hellno";
+export const PROJECT_ID = 'looppredict';
+export const PROJECT_TITLE = "looppredict";
+export const PROJECT_DESCRIPTION = "On-chain analytics and predictions for DeFi protocols";
