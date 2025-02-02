@@ -7,6 +7,7 @@ import sdk, {
   type Context,
 } from "@farcaster/frame-sdk";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "~/components/ui/card";
+import { useQuery } from '@tanstack/react-query';
 
 import { config } from "~/components/providers/WagmiProvider";
 import { PurpleButton } from "~/components/ui/PurpleButton";
@@ -17,19 +18,47 @@ import { createStore } from "mipd";
 import { Label } from "~/components/ui/label";
 import { PROJECT_TITLE } from "~/lib/constants";
 
-function ExampleCard() {
+interface Prediction {
+  year: number;
+  prediction: string;
+  date: string;
+}
+
+interface Groundhog {
+  name: string;
+  slug: string;
+  region: string;
+  predictions: Prediction[];
+}
+
+async function fetchGroundhogPredictions() {
+  const response = await fetch(`${GROUNDHOG_API_BASE}/groundhogs`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch predictions');
+  }
+  return response.json() as Promise<Groundhog[]>;
+}
+
+function PredictionCard({ groundhog }: { groundhog: Groundhog }) {
+  const latestPrediction = groundhog.predictions[0];
+  
   return (
-    <Card className="border-neutral-200 bg-white">
+    <Card className="border-neutral-200 bg-white mb-4">
       <CardHeader>
-        <CardTitle className="text-neutral-900">Welcome to the Frame Template</CardTitle>
+        <CardTitle className="text-neutral-900">{groundhog.name}</CardTitle>
         <CardDescription className="text-neutral-600">
-          This is an example card that you can customize or remove
+          {groundhog.region}
         </CardDescription>
       </CardHeader>
       <CardContent className="text-neutral-800">
-        <p>
-          Your frame content goes here. The text is intentionally dark to ensure good readability.
-        </p>
+        {latestPrediction ? (
+          <div>
+            <p className="font-bold">Latest Prediction ({latestPrediction.year}):</p>
+            <p>{latestPrediction.prediction}</p>
+          </div>
+        ) : (
+          <p>No predictions available</p>
+        )}
       </CardContent>
     </Card>
   );
@@ -137,7 +166,18 @@ export default function Frame(
     >
       <div className="w-[300px] mx-auto py-2 px-2">
         <h1 className="text-2xl font-bold text-center mb-4 text-neutral-900">{title}</h1>
-        <ExampleCard />
+        
+        {context && (
+          <div className="space-y-4">
+            {useQuery({
+              queryKey: ['groundhogs'],
+              queryFn: fetchGroundhogPredictions,
+              select: (data) => data.slice(0, 3), // Show top 3 groundhogs
+            }).data?.map((groundhog) => (
+              <PredictionCard key={groundhog.slug} groundhog={groundhog} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
