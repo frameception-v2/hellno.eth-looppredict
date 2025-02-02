@@ -7,7 +7,7 @@ import sdk, {
   type Context,
 } from "@farcaster/frame-sdk";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "~/components/ui/card";
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { config } from "~/components/providers/WagmiProvider";
 import { PurpleButton } from "~/components/ui/PurpleButton";
@@ -29,6 +29,40 @@ interface Groundhog {
   slug: string;
   region: string;
   predictions: Prediction[];
+}
+
+const queryClient = new QueryClient();
+
+function GroundhogPredictions() {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['groundhogs'],
+    queryFn: fetchGroundhogPredictions,
+    select: (data) => data.slice(0, 3), // Show top 3 groundhogs
+  });
+
+  if (isLoading) {
+    return (
+      <div className="text-center text-neutral-600">
+        Loading predictions...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center text-red-600">
+        Failed to load predictions
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {data?.map((groundhog) => (
+        <PredictionCard key={groundhog.slug} groundhog={groundhog} />
+      ))}
+    </div>
+  );
 }
 
 async function fetchGroundhogPredictions() {
@@ -64,7 +98,19 @@ function PredictionCard({ groundhog }: { groundhog: Groundhog }) {
   );
 }
 
-export default function Frame(
+export default function Frame({
+  title = PROJECT_TITLE,
+}: {
+  title?: string;
+} = {}) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <FrameContent title={title} />
+    </QueryClientProvider>
+  );
+}
+
+function FrameContent(
   { title }: { title?: string } = { title: PROJECT_TITLE }
 ) {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
@@ -167,17 +213,7 @@ export default function Frame(
       <div className="w-[300px] mx-auto py-2 px-2">
         <h1 className="text-2xl font-bold text-center mb-4 text-neutral-900">{title}</h1>
         
-        {context && (
-          <div className="space-y-4">
-            {useQuery({
-              queryKey: ['groundhogs'],
-              queryFn: fetchGroundhogPredictions,
-              select: (data) => data.slice(0, 3), // Show top 3 groundhogs
-            }).data?.map((groundhog) => (
-              <PredictionCard key={groundhog.slug} groundhog={groundhog} />
-            ))}
-          </div>
-        )}
+        <GroundhogPredictions />
       </div>
     </div>
   );
