@@ -5,11 +5,13 @@ export async function GET() {
 
   const config = {
     accountAssociation: {
-      header:
-        "eyJmaWQiOjM2MjEsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgyY2Q4NWEwOTMyNjFmNTkyNzA4MDRBNkVBNjk3Q2VBNENlQkVjYWZFIn0",
-      payload: "eyJkb21haW4iOiJmcmFtZXMtdjIudmVyY2VsLmFwcCJ9",
-      signature:
-        "MHhiNDIwMzQ1MGZkNzgzYTExZjRiOTllZTFlYjA3NmMwOTdjM2JkOTY1NGM2ODZjYjkyZTAyMzk2Y2Q0YjU2MWY1MjY5NjI5ZGQ5NTliYjU0YzEwOGI4OGVmNjdjMTVlZTdjZDc2YTRiMGU5NzkzNzA3YzkxYzFkOWFjNTg0YmQzNjFi",
+      message: {
+        domain: "looppredict.vercel.app",
+        timestamp: 1738529918,
+        expirationTime: 1746305918
+      },
+      signature: "54c52b82ca8e15ba5a624d53dc1073ec6181f449da98f1a5c90b8174902266ad6c587cc5df3721d7510ff8f67fbfa3dace11795013dcc81b82625073a4b445051c",
+      signingKey: "a3ce0456c7d0b693a0a25aa1e26ea953796db8ae5de105f9d4c38948e535c359"
     },
     frame: {
       version: "1",
