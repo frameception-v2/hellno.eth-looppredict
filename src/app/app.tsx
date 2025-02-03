@@ -8,8 +8,6 @@ const Frame = dynamic(() => import("~/components/Frame"), {
   loading: () => <div>Loading predictions...</div>
 });
 
-export default function App(
-  { title }: { title?: string } = { title: PROJECT_TITLE }
-) {
+export default function App() {
   return <Frame />;
 }
