@@ -4,13 +4,13 @@ import App from "~/app/app";
 const appUrl = process.env.NEXT_PUBLIC_URL;
 
 interface Props {
-  params: Promise<{
+  params: {
     name: string;
-  }>;
+  };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { name } = await params;
+  const { name } = params;
 
   const frame = {
     version: "next",
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function HelloNameFrame({ params }: Props) {
-  const { name } = await params;
+  const { name } = params;
 
-  return <App title={`Hello, ${name}`} />;
+  return <App />; // Removed title prop
 }
