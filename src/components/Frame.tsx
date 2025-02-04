@@ -14,7 +14,7 @@ import { PurpleButton } from "~/components/ui/PurpleButton";
 // Proper default export component
 export default function Frame() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
-  const [context, setContext] = useState<sdk.Context>();
+  const [context, setContext] = useState<Context>(); // Changed from sdk.Context to imported Context type
   const queryClient = useQueryClient();
 
   useEffect(() => {
