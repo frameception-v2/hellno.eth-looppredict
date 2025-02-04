@@ -4,7 +4,7 @@ import { useEffect, useCallback, useState } from "react";
 import sdk, {
   AddFrame,
   SignIn as SignInCore,
-  type FrameContext, // Changed from Context to FrameContext
+  type Context,
 } from "@farcaster/frame-sdk";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "~/components/ui/card";
 import { useQuery, QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
@@ -12,7 +12,7 @@ import { PurpleButton } from "~/components/ui/PurpleButton";
 
 export default function Frame() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
-  const [context, setContext] = useState<FrameContext>(); // Updated type to FrameContext
+  const [context, setContext] = useState<Context>();
   const queryClient = useQueryClient();
 
   useEffect(() => {
