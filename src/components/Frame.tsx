@@ -1,20 +1,18 @@
 "use client";
 
 import { useEffect, useCallback, useState } from "react";
-import { 
-  sdk,
+import sdk, {
   AddFrame,
   SignIn as SignInCore,
-  type Context,
+  type FrameContext, // Changed from Context to FrameContext
 } from "@farcaster/frame-sdk";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "~/components/ui/card";
 import { useQuery, QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
 import { PurpleButton } from "~/components/ui/PurpleButton";
 
-// Proper default export component
 export default function Frame() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
-  const [context, setContext] = useState<Context>(); // Changed from sdk.Context to imported Context type
+  const [context, setContext] = useState<FrameContext>(); // Updated type to FrameContext
   const queryClient = useQueryClient();
 
   useEffect(() => {
